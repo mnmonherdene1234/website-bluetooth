@@ -1,12 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Website Bluetooth</title>
-</head>
-<body>
-    <h1>Hello World</h1>
-    <p>Hello World</p>
-</body>
+  </head>
+  <body>
+    <h1>Website Bluetooth</h1>
+    <p id="available">Available: ?</p>
+    <p id="id">id: ?</p>
+    <p id="connected">connected: ?</p>
+    <button onclick="bluetooth()">Select Bluetooth device</button>
+    <script>
+      const idP = document.getElementById("id");
+      const connectedP = document.getElementById("connected");
+      const availableP = document.getElementById("available");
+
+      function bluetooth() {
+        if ("bluetooth" in navigator) {
+          navigator.bluetooth.getAvailability().then((available) => {
+            availableP.innerHTML = `Available: ${available}`;
+          });
+
+          navigator.bluetooth
+            .requestDevice({
+              acceptAllDevices: true,
+            })
+            .then((result) => {
+              console.log(result);
+
+              idP.innerHTML = `id: ${result.id}`;
+              connectedP.innerHTML = `Connected: ${result.gatt.connected}`;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          alert(
+            "Web browser not support bluetooth! try another broswers: Google Chrome, Edge, Firefox, Opera..."
+          );
+        }
+      }
+    </script>
+  </body>
 </html>
